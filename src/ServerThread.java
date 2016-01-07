@@ -65,6 +65,7 @@ public class ServerThread implements Runnable{
 					OutputStream os = s.getOutputStream();
 					JSONObject outObject = new JSONObject();
 					outObject.put("response", false);
+					outObject.put("type", "responseLogin");
 					outObject.put("remark", "username wrong");
 					os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
 				} catch (SocketException e) {
@@ -86,6 +87,7 @@ public class ServerThread implements Runnable{
 							OutputStream os = s.getOutputStream();
 							JSONObject outObject = new JSONObject();
 							outObject.put("response", true);
+							outObject.put("type", "responseLogin");
 							outObject.put("remark", "notHaveUnReceivedHw");
 							outObject.put("biggestHwNumber", biggestHwNumber);
 							os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
@@ -100,6 +102,7 @@ public class ServerThread implements Runnable{
 							OutputStream os = s.getOutputStream();
 							JSONObject outObject = new JSONObject();
 							outObject.put("response", true);
+							outObject.put("type", "responseLogin");
 							outObject.put("remark", "haveUnReceivedHw");
 							outObject.put("biggestHwNumber", biggestHwNumber);
 							os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
@@ -120,6 +123,7 @@ public class ServerThread implements Runnable{
 									Document itemHwDoc = (Document)hwDoc.get(key);
 									JSONObject outObject = new JSONObject();
 									outObject.put("response", true);
+									outObject.put("type", "responseLogin");
 									outObject.put("remark", "haveNewHw");
 									outObject.put("subject", itemHwDoc.get("subject").toString());
 									outObject.put("deadline", itemHwDoc.get("deadline").toString());
@@ -142,6 +146,7 @@ public class ServerThread implements Runnable{
 						OutputStream os = s.getOutputStream();
 						JSONObject outObject = new JSONObject();
 						outObject.put("response", false);
+						outObject.put("type", "responseLogin");
 						outObject.put("remark", "password wrong");
 						os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
 					} catch (SocketException e) {
@@ -174,6 +179,7 @@ public class ServerThread implements Runnable{
 					OutputStream os = s.getOutputStream();
 					JSONObject outObject = new JSONObject();
 					outObject.put("response", true);
+					outObject.put("type", "responseSendHomework");
 					os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
 				} catch (SocketException e) {
 					e.printStackTrace();
@@ -189,6 +195,7 @@ public class ServerThread implements Runnable{
 					OutputStream os = rs.getOutputStream();
 					JSONObject outObject = new JSONObject();
 					outObject.put("response", true);
+					outObject.put("type", "responseHaveNewHw");
 					outObject.put("subject", hw.get("subject").toString());
 					outObject.put("questionNumber", hw.get("questionNumber").toString());
 					outObject.put("hwRemark", hw.get("remark").toString());
@@ -199,6 +206,7 @@ public class ServerThread implements Runnable{
 					OutputStream ros = s.getOutputStream();
 					JSONObject outObject2 = new JSONObject();
 					outObject2.put("response", true);
+					outObject2.put("type", "responseSendHomework");
 					ros.write((outObject2.toString() + "\r\n").getBytes("utf-8"));
 				} catch (SocketException e) {
 					e.printStackTrace();
@@ -219,6 +227,7 @@ public class ServerThread implements Runnable{
 					OutputStream os = s.getOutputStream();
 					JSONObject outObject = new JSONObject();
 					outObject.put("response", true);
+					outObject.put("type", "responseRegister");
 					os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
 				} catch (SocketException e) {
 					e.printStackTrace();
@@ -230,6 +239,7 @@ public class ServerThread implements Runnable{
 					OutputStream os = s.getOutputStream();
 					JSONObject outObject = new JSONObject();
 					outObject.put("response", false);
+					outObject.put("type", "responseRegister");
 					outObject.put("remark", "username existed");
 					os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
 				} catch (SocketException e) {
@@ -239,6 +249,17 @@ public class ServerThread implements Runnable{
 				}
 			}
             	} else if(type.equals("logout")) {
+			try {
+				OutputStream os = s.getOutputStream();
+				JSONObject outObject = new JSONObject();
+				outObject.put("response", true);
+				outObject.put("type", "responseLogout");
+				os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
+			} catch (SocketException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			System.out.println("############logout successfully##############");
             		Myserver.socketMap.remove(user);
             		Myserver.socketArrayList.remove(s);
@@ -257,6 +278,7 @@ public class ServerThread implements Runnable{
 				OutputStream os = s.getOutputStream();
 				JSONObject outObject = new JSONObject();
 				outObject.put("response", true);
+				outObject.put("type", "responseAddFriend");
 				outObject.put("avatar", avatar);
 				os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
 			} catch (SocketException e) {
@@ -275,6 +297,7 @@ public class ServerThread implements Runnable{
 				OutputStream os = s.getOutputStream();
 				JSONObject outObject = new JSONObject();
 				outObject.put("response", true);
+				outObject.put("type", "responseDeleteFriend");
 				os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
 			} catch (SocketException e) {
 				e.printStackTrace();
@@ -306,6 +329,7 @@ public class ServerThread implements Runnable{
 				OutputStream os = s.getOutputStream();
 				JSONObject outObject = new JSONObject();
 				outObject.put("response", true);
+				outObject.put("type", "responseAddHomework");
 				os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
 			} catch (SocketException e) {
 				e.printStackTrace();
@@ -325,6 +349,8 @@ public class ServerThread implements Runnable{
 				OutputStream os = s.getOutputStream();
 				JSONObject outObject = new JSONObject();
 				outObject.put("response", true);
+				outObject.put("type", "responseDeleteHomework");
+				os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
 				os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
 			} catch (SocketException e) {
 				e.printStackTrace();
@@ -350,6 +376,7 @@ public class ServerThread implements Runnable{
 				OutputStream os = s.getOutputStream();
 				JSONObject outObject = new JSONObject();
 				outObject.put("response", true);
+				outObject.put("type", "responseUpdateHomework");
 				os.write((outObject.toString() + "\r\n").getBytes("utf-8"));
 			} catch (SocketException e) {
 				e.printStackTrace();
@@ -378,3 +405,4 @@ public class ServerThread implements Runnable{
         return null;
     }
 }
+
